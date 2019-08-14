@@ -13,6 +13,11 @@
     Public Function ToSql_ToInt(ByVal obj As Object)
         Return Val(obj)
     End Function
+    Public Function ToSql_ToDatatime(ByVal obj As Object)
+        Dim value As String = "1995-08-24 00:00:00"
+        If Not IsNothing(obj) Then value = Format(obj, "yyyy-MM-dd HH:mm:ss")
+        Return "'" & value & "'"
+    End Function
 #End Region
 #Region "To APP"
     Public Function ToApp_BitToBool(ByVal value As Integer)

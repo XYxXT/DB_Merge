@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.DB_Merge.My.MySettings
+        Friend ReadOnly Property Settings() As Global.DBMerge.My.MySettings
             Get
-                Return Global.DB_Merge.My.MySettings.Default
+                Return Global.DBMerge.My.MySettings.Default
             End Get
         End Property
     End Module

@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DA1DA0EA-214E-43A6-8298-275C37FBEDF2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>DB_Merge.My.MyApplication</StartupObject>
-    <RootNamespace>DB_Merge</RootNamespace>
+    <StartupObject>DBMerge.My.MyApplication</StartupObject>
+    <RootNamespace>DBMerge</RootNamespace>
     <AssemblyName>DB MERGE</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
@@ -84,11 +84,17 @@
     <Compile Include="AppConfig\Constants.vb" />
     <Compile Include="AppConfig\Start.vb" />
     <Compile Include="AppConfig\Variables.vb" />
-    <Compile Include="Form\DB_Merge.vb">
+    <Compile Include="Form\DBMerge.Designer.vb">
+      <DependentUpon>DBMerge.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\DBMerge.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\DB_Merge.Designer.vb">
-      <DependentUpon>DB_Merge.vb</DependentUpon>
+    <Compile Include="Form\DirList.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\DirList.Designer.vb">
+      <DependentUpon>DirList.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -113,8 +119,11 @@
     <Compile Include="Util\U_System.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Form\DB_Merge.resx">
-      <DependentUpon>DB_Merge.vb</DependentUpon>
+    <EmbeddedResource Include="Form\DBMerge.resx">
+      <DependentUpon>DBMerge.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\DirList.resx">
+      <DependentUpon>DirList.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -144,6 +153,7 @@
     <Content Include="Resource\Image\root.ico" />
     <Content Include="Resource\Image\root.png" />
     <Content Include="Resource\Image\search.png" />
+    <None Include="Resource\Image\start.png" />
     <Content Include="Resource\Image\synchronized.png" />
     <Content Include="Resource\Image\upload.png" />
   </ItemGroup>

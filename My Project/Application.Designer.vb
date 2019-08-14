@@ -32,7 +32,7 @@ Namespace My
         
         <Global.System.Diagnostics.DebuggerStepThroughAttribute()>  _
         Protected Overrides Sub OnCreateMainForm()
-            Me.MainForm = Global.DB_Merge.DB_Merge
+            Me.MainForm = Global.DBMerge.DirList
         End Sub
     End Class
 End Namespace

@@ -1,8 +1,10 @@
 ﻿Imports System.Data.SQLite
+Imports System.IO
 
 Module U_Sqlite
-    Public ConnectionString As String = "Data Source={0};Version=3;Pooling=True;Synchronous=Off;journal mode=Memory;"
-    Public ConnectionFile As String
+    Public SqliteConnectionPatern As String = "Data Source={0};Version=3;Pooling=True;Synchronous=Off;journal mode=Memory;"
+    Public SqliteConnectionString As String = ""
+    Public SqliteConnectionFile As String
     Public SqliteConn As SQLiteConnection
     Public SqliteCommand As SQLiteCommand
 #Region "INIT"
@@ -14,16 +16,25 @@ Module U_Sqlite
         Return False
     End Function
     Public Sub SqliteOpen()
-        SqliteConn = New SQLiteConnection(ConnectionString)
+        SqliteConn = New SQLiteConnection(SqliteConnectionString)
         SqliteCommand = New SQLiteCommand(SqliteConn)
         SqliteConn.Open()
     End Sub
-    Public Sub SqliteClose()
+    Private Sub Close()
         SqliteCommand.Cancel()
         SqliteConn.Close()
         GC.Collect()
         GC.WaitForPendingFinalizers()
     End Sub
+    Public Sub SqliteClose()
+        Close()
+        File.Create("clear.db").Dispose()
+        SqliteConnectionString = String.Format(SqliteConnectionPatern, "clear.db")
+        SqliteOpen()
+        Close()
+        File.Delete("clear.db")
+    End Sub
+
 #End Region
 #Region "BASIC"
     Public Sub SqliteExecute(ByVal sqlCommand As String)
@@ -50,7 +61,6 @@ Module U_Sqlite
         End Using
     End Sub
     Public Sub SqliteDtBd(ByRef dt As DataTable, ByVal tableName As String)
-
         If dt.Rows.Count = 0 Then Exit Sub
         Dim indexX As Integer = dt.Columns.Count - 1
         Dim columnsName(dt.Columns.Count - 2) As String
@@ -62,6 +72,7 @@ Module U_Sqlite
         Next
 
         For r As Integer = dt.Rows.Count - 1 To 0 Step -1
+            If IsDBNull(dt.Rows(r).ItemArray(indexX)) Then Continue For
             Select Case (dt.Rows(r).ItemArray(indexX))
                 Case "N"
                     dt.Rows(r).ItemArray(indexX) = ""
@@ -89,6 +100,10 @@ Module U_Sqlite
                     insertCommand_2 &= ToSql_ToTxt(dr.ItemArray(i))
                 Case "Int32", "Int64"
                     insertCommand_2 &= ToSql_ToInt(dr.ItemArray(i))
+                Case "DateTime"
+                    insertCommand_2 &= ToSql_ToDatatime(dr.ItemArray(i))
+                Case "Boolean"
+                    insertCommand_2 &= ToSql_BoolToBit(dr.ItemArray(i))
                 Case Else
                     System.Windows.Forms.MessageBox.Show("UNKNOWN TYPE: " & columnsType(i))
             End Select
@@ -108,6 +123,10 @@ Module U_Sqlite
                     updateCommand &= ToSql_ToTxt(dr.ItemArray(i))
                 Case "Int32", "Int64"
                     updateCommand &= ToSql_ToInt(dr.ItemArray(i))
+                Case "DateTime"
+                    updateCommand &= ToSql_ToDatatime(dr.ItemArray(i))
+                Case "Boolean"
+                    updateCommand &= ToSql_BoolToBit(dr.ItemArray(i))
                 Case Else
                     System.Windows.Forms.MessageBox.Show("UNKNOWN TYPE: " & columnsType(i))
             End Select
@@ -184,6 +203,10 @@ Module U_Sqlite
                     insertCommand_2 &= ToSql_ToTxt(DgvCellGet(dgv, rw, i))
                 Case "Int32", "Int64"
                     insertCommand_2 &= ToSql_ToInt(DgvCellGet(dgv, rw, i))
+                Case "DateTime"
+                    insertCommand_2 &= ToSql_ToDatatime(DgvCellGet(dgv, rw, i))
+                Case "Boolean"
+                    insertCommand_2 &= ToSql_BoolToBit(DgvCellGet(dgv, rw, i))
                 Case Else
                     System.Windows.Forms.MessageBox.Show("UNKNOWN TYPE: " & columnsType(i))
                     Exit Sub
@@ -204,6 +227,10 @@ Module U_Sqlite
                     updateCommand &= ToSql_ToTxt(DgvCellGet(dgv, rw, i))
                 Case "Int32", "Int64"
                     updateCommand &= ToSql_ToInt(DgvCellGet(dgv, rw, i))
+                Case "DateTime"
+                    updateCommand &= ToSql_ToDatatime(DgvCellGet(dgv, rw, i))
+                Case "Boolean"
+                    updateCommand &= ToSql_BoolToBit(DgvCellGet(dgv, rw, i))
                 Case Else
                     System.Windows.Forms.MessageBox.Show("UNKNOWN TYPE: " & columnsType(i))
             End Select
